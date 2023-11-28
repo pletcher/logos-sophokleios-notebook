@@ -10,7 +10,7 @@ Mix.install([
 ])
 ```
 
-## Basic module for data processing
+## Module for data processing
 
 ```elixir
 defmodule SophoclesTfIdf do
@@ -202,6 +202,9 @@ lineplots_by_urn =
 ```
 
 ```elixir
-Tucan.vconcat(Map.get(lineplots_by_urn, "urn:cts:greekLit:tlg0011.tlg002.perseus-grc2.cp-words"))
+Tucan.vconcat([
+  Map.get(lineplots_by_urn, "urn:cts:greekLit:tlg0011.tlg002.perseus-grc2.cp-words")
+  |> List.last()
+])
 |> Tucan.set_theme(:vox)
 ```
