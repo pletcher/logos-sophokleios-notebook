@@ -1,0 +1,207 @@
+<!-- livebook:{"file_entries":[{"name":"tlg0011.tlg001.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg005.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg006.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg008.perseus-grc2.xml","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg001.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg002.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg003.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg004.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg005.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg006.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg007.perseus-grc2.cp-words.csv","type":"attachment"}]} -->
+
+# Sophoclean Vocabulary Comparisons
+
+```elixir
+Mix.install([
+  {:csv, "~> 3.2"},
+  {:tucan, "~> 0.2.1"},
+  {:kino_vega_lite, "~> 0.1.8"}
+])
+```
+
+## Basic module for data processing
+
+```elixir
+defmodule SophoclesTfIdf do
+  def speaker_documents_by_play do
+    csvs()
+    |> Enum.reduce(%{}, fn filename, acc ->
+      speaker_doc =
+        File.stream!(filename)
+        |> CSV.decode!(escape_character: ?|, headers: true, separator: ?\t)
+        |> Enum.group_by(&Map.get(&1, "speaker"))
+
+      urn = filename |> Path.basename() |> Path.rootname()
+      Map.put(acc, urn, speaker_doc)
+    end)
+  end
+
+  def plays_as_documents do
+    csvs()
+    |> Enum.map(fn filename ->
+      File.stream!(filename)
+      |> CSV.decode!(escape_character: ?|, headers: true, separator: ?\t)
+    end)
+  end
+
+  def speaker_frequencies(speaker_document) do
+    speaker_document |> Enum.frequencies_by(&Map.get(&1, "lemma"))
+  end
+
+  def score_line(words, other_speaker_document) do
+    max_tf_idf_other_speaker =
+      other_speaker_document
+      |> Enum.max_by(&Map.get(&1, "tf-idf"))
+      |> Map.get("tf-idf")
+
+    word_scores =
+      words
+      |> Enum.map(fn word ->
+        other_speaker_document
+        |> Enum.find(%{"tf-idf" => 0}, &(Map.get(&1, "lemma") == Map.get(word, "lemma")))
+        |> Map.get("tf-idf")
+      end)
+
+    Enum.sum(word_scores) / Enum.count(words) / max_tf_idf_other_speaker
+  end
+
+  def compare_speakers(speaker_documents) do
+    speaker_documents
+    |> Enum.map(fn {speaker, document} ->
+      document_by_line = document |> Enum.group_by(&Map.get(&1, "n"))
+
+      scored_document =
+        document_by_line
+        |> Enum.map(fn {n, line_words} ->
+          line_scores =
+            speaker_documents
+            |> Enum.filter(fn {speaker2, _doc} -> speaker != speaker2 end)
+            |> Enum.map(fn {speaker2, document} ->
+              {speaker2, score_line(line_words, document)}
+            end)
+
+          {n, line_scores}
+        end)
+
+      {speaker, scored_document}
+    end)
+  end
+
+  def tf(term, document) do
+    values = Map.values(document)
+    total_terms = Enum.sum(values)
+    term_value = Map.get(document, term, 0)
+
+    term_value / total_terms
+  end
+
+  def idf(term, documents) do
+    df =
+      documents
+      |> Enum.reduce(0, fn {_id, document}, acc ->
+        if Enum.find(document, &(Map.get(&1, "lemma") == term)) do
+          acc + 1
+        else
+          acc
+        end
+      end)
+
+    :math.log(Enum.count(documents) / df)
+  end
+
+  def clean_line_number(n) do
+    try do
+      String.to_integer(n)
+    rescue
+      _ ->
+        Regex.replace(~r/[[:alpha:]]/u, n, "") |> String.to_integer()
+    end
+  end
+
+  def urn_to_title(urn) do
+    case urn do
+      "urn:cts:greekLit:tlg0011.tlg001.perseus-grc2.cp-words" -> "Trachiniae"
+      "urn:cts:greekLit:tlg0011.tlg002.perseus-grc2.cp-words" -> "Antigone"
+      "urn:cts:greekLit:tlg0011.tlg003.perseus-grc2.cp-words" -> "Ajax"
+      "urn:cts:greekLit:tlg0011.tlg004.perseus-grc2.cp-words" -> "Oedipus Tyrannus"
+      "urn:cts:greekLit:tlg0011.tlg005.perseus-grc2.cp-words" -> "Electra"
+      "urn:cts:greekLit:tlg0011.tlg006.perseus-grc2.cp-words" -> "Philoctetes"
+      "urn:cts:greekLit:tlg0011.tlg007.perseus-grc2.cp-words" -> "Oedipus at Colonus"
+      _ -> "Invalid URN for this project"
+    end
+  end
+
+  defp csvs do
+    Path.wildcard(__DIR__ <> "/files/*.csv")
+  end
+end
+```
+
+```elixir
+compared_lines =
+  SophoclesTfIdf.speaker_documents_by_play()
+  |> Enum.map(fn {urn, speaker_documents} ->
+    speaker_tf_idfs =
+      speaker_documents
+      |> Enum.reduce(%{}, fn {speaker, document}, acc ->
+        frequencies =
+          document
+          |> Enum.frequencies_by(&Map.get(&1, "lemma"))
+
+        document =
+          document
+          |> Enum.map(fn word ->
+            tf = SophoclesTfIdf.tf(Map.get(word, "lemma"), frequencies)
+            idf = SophoclesTfIdf.idf(Map.get(word, "lemma"), speaker_documents)
+
+            word
+            |> Map.put("tf", tf)
+            |> Map.put("idf", idf)
+            |> Map.put("tf-idf", tf * idf)
+          end)
+
+        Map.put(acc, speaker, document)
+      end)
+
+    {urn, SophoclesTfIdf.compare_speakers(speaker_tf_idfs)}
+  end)
+```
+
+## Plotting the data
+
+```elixir
+lineplots_by_urn =
+  compared_lines
+  |> Enum.reduce(%{}, fn {urn, comparisons_by_speaker}, acc ->
+    plots =
+      comparisons_by_speaker
+      |> Enum.map(fn {speaker, scored_lines} ->
+        sorted_lines =
+          scored_lines
+          |> Enum.sort_by(fn {n, _scores} ->
+            SophoclesTfIdf.clean_line_number(n)
+          end)
+
+        data =
+          sorted_lines
+          |> Enum.flat_map(fn {n, scores} ->
+            scores
+            |> Enum.map(fn {name, score} ->
+              %{"line" => SophoclesTfIdf.clean_line_number(n), "name" => name, "score" => score}
+            end)
+          end)
+
+        Tucan.lineplot(
+          data,
+          "line",
+          "score",
+          x: [type: :ordinal],
+          interpolate: "monotone",
+          color_by: "name",
+          title: "#{speaker} similarity to other speakers in #{SophoclesTfIdf.urn_to_title(urn)}",
+          tooltip: :data,
+          points: true
+        )
+        |> Tucan.set_height(600)
+        |> Tucan.set_width(1200)
+      end)
+
+    Map.put(acc, urn, plots)
+  end)
+```
+
+```elixir
+Tucan.vconcat(Map.get(lineplots_by_urn, "urn:cts:greekLit:tlg0011.tlg002.perseus-grc2.cp-words"))
+|> Tucan.set_theme(:vox)
+```
