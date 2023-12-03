@@ -11,15 +11,15 @@ primary_region = "cdg"
 
 [env]
   ELIXIR_ERL_OPTIONS = "-proto_dist inet6_tcp"
-  LIVEBOOK_DATA_PATH = "/data"
-  LIVEBOOK_HOME = "/data"
+  LIVEBOOK_DATA_PATH = "/files"
+  LIVEBOOK_HOME = "/files"
   LIVEBOOK_IP = "::"
-  LIVEBOOK_ROOT_PATH = "/data"
+  LIVEBOOK_ROOT_PATH = "/files"
   PORT = "8080"
 
 [[mounts]]
-  source = "data"
-  destination = "/data"
+  source = "files"
+  destination = "/files"
   auto_extend_size_threshold = 0
 
 [http_service]

@@ -1,12 +1,13 @@
-<!-- livebook:{"file_entries":[{"name":"tlg0011.tlg001.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg005.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg006.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg008.perseus-grc2.xml","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg001.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg002.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg003.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg004.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg005.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg006.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg007.perseus-grc2.cp-words.csv","type":"attachment"}]} -->
+<!-- livebook:{"file_entries":[{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Δηιάνειρα.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Θεράπαινα.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Λίχας.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Πρέσβυς.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Τροφός.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Χορός.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Ἄγγελος.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Ἡμιχόριον 1.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Ἡμιχόριον 2.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Ἡμιχόριον.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Ἡρακλῆς.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.cp-words.Ὕλλος.csv","type":"attachment"},{"name":"tlg0011.tlg001.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.cp-words.Αἵμων.csv","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.cp-words.Εὐρυδίκη.csv","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.cp-words.Κρέων.csv","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.cp-words.Τειρεσίας.csv","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.cp-words.Φύλαξ.csv","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.cp-words.Χορός.csv","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.cp-words.Ἀντιγόνη.csv","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.cp-words.Ἄγγελος.csv","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.cp-words.Ἐξάγγελος.csv","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.cp-words.Ἰσμήνη.csv","type":"attachment"},{"name":"tlg0011.tlg002.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Αἴας.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Μενέλαος.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Τέκμησσα.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Τεῦκρος.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Χορός.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Ἀγαμέμνων.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Ἀθήνα.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Ἄγγελος.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Ἡμιχόριον 1.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Ἡμιχόριον 2.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.cp-words.Ὀδυσσεύς.csv","type":"attachment"},{"name":"tlg0011.tlg003.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.cp-words.Θεράπων.csv","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.cp-words.Κρέων.csv","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.cp-words.Οἰδίπους.csv","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.cp-words.Τειρεσίας.csv","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.cp-words.Χορός.csv","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.cp-words.Ἄγγελος.csv","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.cp-words.Ἐξάγγελος.csv","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.cp-words.Ἰοκάστη.csv","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.cp-words.Ἱερεύς.csv","type":"attachment"},{"name":"tlg0011.tlg004.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg005.perseus-grc2.cp-words.Αἴγισθος.csv","type":"attachment"},{"name":"tlg0011.tlg005.perseus-grc2.cp-words.Κλυταιμνήστρα.csv","type":"attachment"},{"name":"tlg0011.tlg005.perseus-grc2.cp-words.Παιδαγωγός.csv","type":"attachment"},{"name":"tlg0011.tlg005.perseus-grc2.cp-words.Χορός.csv","type":"attachment"},{"name":"tlg0011.tlg005.perseus-grc2.cp-words.Χρυσόθεμις.csv","type":"attachment"},{"name":"tlg0011.tlg005.perseus-grc2.cp-words.Ἠλέκτρα.csv","type":"attachment"},{"name":"tlg0011.tlg005.perseus-grc2.cp-words.Ὀρέστης.csv","type":"attachment"},{"name":"tlg0011.tlg005.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg006.perseus-grc2.cp-words.Νεοπτόλεμος.csv","type":"attachment"},{"name":"tlg0011.tlg006.perseus-grc2.cp-words.Φιλοκτήτης.csv","type":"attachment"},{"name":"tlg0011.tlg006.perseus-grc2.cp-words.Χορός.csv","type":"attachment"},{"name":"tlg0011.tlg006.perseus-grc2.cp-words.Ἔμπορος.csv","type":"attachment"},{"name":"tlg0011.tlg006.perseus-grc2.cp-words.Ἡρακλῆς.csv","type":"attachment"},{"name":"tlg0011.tlg006.perseus-grc2.cp-words.Ὀδυσσεύς.csv","type":"attachment"},{"name":"tlg0011.tlg006.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.cp-words.Θησεύς.csv","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.cp-words.Κρέων.csv","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.cp-words.Ξένος.csv","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.cp-words.Οἰδίπους.csv","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.cp-words.Πολυνείκης.csv","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.cp-words.Χορός.csv","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.cp-words.Ἀντιγόνη.csv","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.cp-words.Ἄγγελος.csv","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.cp-words.Ἰσμήνη.csv","type":"attachment"},{"name":"tlg0011.tlg007.perseus-grc2.xml","type":"attachment"},{"name":"tlg0011.tlg008.perseus-grc2.xml","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg001.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg002.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg003.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg004.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg005.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg006.perseus-grc2.cp-words.csv","type":"attachment"},{"name":"urn:cts:greekLit:tlg0011.tlg007.perseus-grc2.cp-words.csv","type":"attachment"}]} -->
 
 # Sophoclean Vocabulary Comparisons
 
 ```elixir
 Mix.install([
   {:csv, "~> 3.2"},
-  {:tucan, "~> 0.2.1"},
-  {:kino_vega_lite, "~> 0.1.8"}
+  {:kino_vega_lite, "~> 0.1.8"},
+  {:similarity, "~> 0.2"},
+  {:tucan, "~> 0.2.1"}
 ])
 ```
 
@@ -40,7 +41,7 @@ defmodule SophoclesTfIdf do
   end
 
   def score_line(words, other_speaker_document) do
-    max_tf_idf_other_speaker =
+    other_speaker_max_tf_idf =
       other_speaker_document
       |> Enum.max_by(&Map.get(&1, "tf-idf"))
       |> Map.get("tf-idf")
@@ -53,7 +54,7 @@ defmodule SophoclesTfIdf do
         |> Map.get("tf-idf")
       end)
 
-    Enum.sum(word_scores) / Enum.count(words) / max_tf_idf_other_speaker
+    Enum.sum(word_scores) / Enum.count(words) / other_speaker_max_tf_idf
   end
 
   def compare_speakers(speaker_documents) do
@@ -66,9 +67,8 @@ defmodule SophoclesTfIdf do
         |> Enum.map(fn {n, line_words} ->
           line_scores =
             speaker_documents
-            |> Enum.filter(fn {speaker2, _doc} -> speaker != speaker2 end)
-            |> Enum.map(fn {speaker2, document} ->
-              {speaker2, score_line(line_words, document)}
+            |> Enum.map(fn {speaker2, speaker2_document} ->
+              {speaker2, score_line(line_words, speaker2_document)}
             end)
 
           {n, line_scores}
@@ -110,20 +110,20 @@ defmodule SophoclesTfIdf do
   end
 
   def urn_to_title(urn) do
-    case urn do
-      "urn:cts:greekLit:tlg0011.tlg001.perseus-grc2.cp-words" -> "Trachiniae"
-      "urn:cts:greekLit:tlg0011.tlg002.perseus-grc2.cp-words" -> "Antigone"
-      "urn:cts:greekLit:tlg0011.tlg003.perseus-grc2.cp-words" -> "Ajax"
-      "urn:cts:greekLit:tlg0011.tlg004.perseus-grc2.cp-words" -> "Oedipus Tyrannus"
-      "urn:cts:greekLit:tlg0011.tlg005.perseus-grc2.cp-words" -> "Electra"
-      "urn:cts:greekLit:tlg0011.tlg006.perseus-grc2.cp-words" -> "Philoctetes"
-      "urn:cts:greekLit:tlg0011.tlg007.perseus-grc2.cp-words" -> "Oedipus at Colonus"
-      _ -> "Invalid URN for this project"
+    cond do
+      String.ends_with?(urn, "tlg0011.tlg001.perseus-grc2.cp-words") -> "Trachiniae"
+      String.ends_with?(urn, "tlg0011.tlg002.perseus-grc2.cp-words") -> "Antigone"
+      String.ends_with?(urn, "tlg0011.tlg003.perseus-grc2.cp-words") -> "Ajax"
+      String.ends_with?(urn, "tlg0011.tlg004.perseus-grc2.cp-words") -> "Oedipus Tyrannus"
+      String.ends_with?(urn, "tlg0011.tlg005.perseus-grc2.cp-words") -> "Electra"
+      String.ends_with?(urn, "tlg0011.tlg006.perseus-grc2.cp-words") -> "Philoctetes"
+      String.ends_with?(urn, "tlg0011.tlg007.perseus-grc2.cp-words") -> "Oedipus at Colonus"
+      true -> "Invalid URN for this project"
     end
   end
 
   defp csvs do
-    Path.wildcard(__DIR__ <> "/files/*.csv")
+    Path.wildcard(__DIR__ <> "/files/*.cp-words.csv")
   end
 end
 ```
@@ -161,12 +161,14 @@ compared_lines =
 ## Plotting the data
 
 ```elixir
-lineplots_by_urn =
-  compared_lines
-  |> Enum.reduce(%{}, fn {urn, comparisons_by_speaker}, acc ->
-    plots =
+defmodule ComparisonToCsv do
+  def to_csv(compared_lines) do
+    compared_lines
+    |> Enum.each(fn {urn, comparisons_by_speaker} ->
+      urn = String.replace(urn, "urn:cts:greekLit:", "")
+
       comparisons_by_speaker
-      |> Enum.map(fn {speaker, scored_lines} ->
+      |> Enum.each(fn {speaker, scored_lines} ->
         sorted_lines =
           scored_lines
           |> Enum.sort_by(fn {n, _scores} ->
@@ -178,33 +180,230 @@ lineplots_by_urn =
           |> Enum.flat_map(fn {n, scores} ->
             scores
             |> Enum.map(fn {name, score} ->
-              %{"line" => SophoclesTfIdf.clean_line_number(n), "name" => name, "score" => score}
+              %{
+                "line" => SophoclesTfIdf.clean_line_number(n),
+                "name" => name,
+                "similarity_score" => score
+              }
             end)
           end)
 
-        Tucan.lineplot(
-          data,
-          "line",
-          "score",
-          x: [type: :ordinal],
-          interpolate: "monotone",
-          color_by: "name",
-          title: "#{speaker} similarity to other speakers in #{SophoclesTfIdf.urn_to_title(urn)}",
-          tooltip: :data,
-          points: true
-        )
-        |> Tucan.set_height(600)
-        |> Tucan.set_width(1200)
+        write("#{urn}.#{speaker}.csv", data)
       end)
+    end)
+  end
 
-    Map.put(acc, urn, plots)
-  end)
+  def write(filename, data) do
+    path = __DIR__ <> "/files/" <> filename
+    dirname = Path.dirname(path)
+
+    case File.mkdir(dirname) do
+      :ok -> :ok
+      {:error, :eexist} -> :ok
+      {:error, reason} -> raise "Error creating file #{reason}"
+    end
+
+    f = File.open!(path, [:write, :utf8])
+
+    data
+    |> CSV.encode(
+      escape_character: ?|,
+      headers: ["line", "name", "similarity_score"],
+      separator: ?\t
+    )
+    |> Enum.each(&IO.write(f, &1))
+  end
+end
 ```
 
 ```elixir
-Tucan.vconcat([
-  Map.get(lineplots_by_urn, "urn:cts:greekLit:tlg0011.tlg002.perseus-grc2.cp-words")
-  |> List.last()
-])
-|> Tucan.set_theme(:vox)
+ComparisonToCsv.to_csv(compared_lines)
+```
+
+```elixir
+defmodule ComparisonPlots do
+  def csv_to_dataset(urn, speaker, title, filter \\ fn _x -> true end)
+
+  def csv_to_dataset(urn, speaker, title, filter) when is_function(filter) do
+    filename = __DIR__ <> "/files/#{urn}.#{speaker}.csv"
+
+    File.stream!(filename)
+    |> CSV.decode!(escape_character: ?|, headers: true, separator: ?\t)
+    |> Enum.filter(fn row -> filter.(row) end)
+    |> Enum.map(fn %{
+                     "line" => line,
+                     "name" => name,
+                     "similarity_score" => similarity_score
+                   } ->
+      %{
+        "line" => SophoclesTfIdf.clean_line_number(line),
+        "name" => name,
+        "similarity" => String.to_float(similarity_score)
+      }
+    end)
+    |> Tucan.area(
+      "line",
+      "similarity",
+      x: [type: :ordinal],
+      interpolate: "monotone",
+      color_by: "name",
+      title: title,
+      tooltip: :data,
+      points: true,
+      mode: :no_stack,
+      fill_opacity: 0.4
+    )
+    |> Tucan.set_height(600)
+    |> Tucan.set_width(1200)
+    |> Tucan.Legend.put_options(:color, label_font_size: 12, symbol_size: 160, title: "Speaker")
+  end
+
+  def csv_to_dataset(urn, speaker, title, filter) when is_list(filter) do
+    csv_to_dataset(urn, speaker, title, &Enum.member?(filter, Map.get(&1, "name")))
+  end
+
+  def csv_to_dataset(urn, speaker, title, filter) when is_binary(filter) do
+    csv_to_dataset(urn, speaker, title, &(Map.get(&1, "name") == filter))
+  end
+
+  def transliterate(s) do
+    String.normalize(s, :nfd)
+    |> String.replace(~r/\W|῾/u, "")
+    |> String.split("")
+    |> Enum.filter(fn c -> c != "" end)
+    |> Enum.map(fn c ->
+      greek_to_ascii(String.downcase(c))
+    end)
+    |> Enum.join("")
+    |> String.capitalize()
+  end
+
+  def greek_to_ascii(c) do
+    case c do
+      "\῾" -> "h"
+      "α" -> "a"
+      "β" -> "b"
+      "γ" -> "g"
+      "δ" -> "d"
+      "ε" -> "e"
+      "ζ" -> "z"
+      "η" -> "e"
+      "θ" -> "th"
+      "ι" -> "i"
+      "κ" -> "c"
+      "λ" -> "l"
+      "μ" -> "m"
+      "ν" -> "n"
+      "ξ" -> "x"
+      "ο" -> "o"
+      "π" -> "p"
+      "ρ" -> "r"
+      "σ" -> "s"
+      "ς" -> "s"
+      "τ" -> "t"
+      "υ" -> "u"
+      "φ" -> "ph"
+      "χ" -> "ch"
+      "ψ" -> "ps"
+      "ω" -> "o"
+    end
+  end
+end
+
+defmodule SelectComparisons do
+  def antigone do
+    urn = "tlg0011.tlg002.perseus-grc2.cp-words"
+
+    antigone_all =
+      ComparisonPlots.csv_to_dataset(urn, "Ἀντιγόνη", "Antigone compared to all other speakers")
+
+    antigone_ismene_kreon =
+      ComparisonPlots.csv_to_dataset(urn, "Ἀντιγόνη", "Antigone compared to Ismene and Creon", [
+        "Ἀντιγόνη",
+        "Ἰσμήνη",
+        "Κρέων"
+      ])
+
+    Tucan.vconcat([antigone_all, antigone_ismene_kreon])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+
+  def creon do
+    urn = "tlg0011.tlg002.perseus-grc2.cp-words"
+
+    kreon_all =
+      ComparisonPlots.csv_to_dataset(urn, "Κρέων", "Creon compared to all other speakers")
+
+    kreon_antigone_ismene =
+      ComparisonPlots.csv_to_dataset(urn, "Κρέων", "Creon compared to Antigone and Ismene", [
+        "Κρέων",
+        "Ἀντιγόνη",
+        "Ἰσμήνη"
+      ])
+
+    Tucan.vconcat([kreon_all, kreon_antigone_ismene])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+
+  def ismene do
+    urn = "tlg0011.tlg002.perseus-grc2.cp-words"
+
+    ismene_all =
+      ComparisonPlots.csv_to_dataset(urn, "Ἰσμήνη", "Ismene compared to all other speakers")
+
+    ismene_antigone_kreon =
+      ComparisonPlots.csv_to_dataset(urn, "Ἰσμήνη", "Ismene compared to Antigone and Creon", [
+        "Ἰσμήνη",
+        "Ἀντιγόνη",
+        "Κρέων"
+      ])
+
+    Tucan.vconcat([ismene_all, ismene_antigone_kreon])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+
+  def menelaus do
+    urn = "tlg0011.tlg003.perseus-grc2.cp-words"
+
+    menelaus_all =
+      ComparisonPlots.csv_to_dataset(urn, "Μενέλαος", "Menelaus compared to all other speakers")
+
+    Tucan.vconcat([menelaus_all])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+
+  def merchant do
+    urn = "tlg0011.tlg006.perseus-grc2.cp-words"
+
+    merchant_all =
+      ComparisonPlots.csv_to_dataset(urn, "Ἔμπορος", "Merchant compared to all other speakers")
+
+    Tucan.vconcat([merchant_all])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+
+  def odysseus do
+    urn = "tlg0011.tlg006.perseus-grc2.cp-words"
+
+    odysseus_all =
+      ComparisonPlots.csv_to_dataset(urn, "Ὀδυσσεύς", "Odysseus compared to all other speakers")
+
+    Tucan.vconcat([odysseus_all])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+
+  def tutor do
+    urn = "tlg0011.tlg005.perseus-grc2.cp-words"
+
+    tutor_all =
+      ComparisonPlots.csv_to_dataset(urn, "Παιδαγωγός", "Tutor compared to all other speakers")
+
+    Tucan.vconcat([tutor_all])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+end
+```
+
+```elixir
+SelectComparisons.odysseus()
 ```
