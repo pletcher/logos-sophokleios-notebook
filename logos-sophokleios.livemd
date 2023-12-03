@@ -123,7 +123,14 @@ defmodule SophoclesTfIdf do
   end
 
   defp csvs do
-    Path.wildcard(__DIR__ <> "/files/*.cp-words.csv")
+    path =
+      if __DIR__ == "." do
+        "../apps/files/*.cp-words.csv"
+      else
+        "/files/*.cp-words.csv"
+      end
+
+    Path.wildcard(__DIR__ <> path)
   end
 end
 ```
@@ -194,7 +201,13 @@ defmodule ComparisonToCsv do
   end
 
   def write(filename, data) do
-    path = __DIR__ <> "/files/" <> filename
+    path =
+      if __DIR__ == "." do
+        __DIR__ <> "/../apps/files/" <> filename
+      else
+        __DIR__ <> "/files/" <> filename
+      end
+
     dirname = Path.dirname(path)
 
     case File.mkdir(dirname) do
@@ -225,7 +238,12 @@ defmodule ComparisonPlots do
   def csv_to_dataset(urn, speaker, title, filter \\ fn _x -> true end)
 
   def csv_to_dataset(urn, speaker, title, filter) when is_function(filter) do
-    filename = __DIR__ <> "/files/#{urn}.#{speaker}.csv"
+    filename =
+      if __DIR__ == "." do
+        __DIR__ <> "/../apps/files/#{urn}.#{speaker}.csv"
+      else
+        __DIR__ <> "/files/#{urn}.#{speaker}.csv"
+      end
 
     File.stream!(filename)
     |> CSV.decode!(escape_character: ?|, headers: true, separator: ?\t)
