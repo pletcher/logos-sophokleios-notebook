@@ -441,3 +441,7 @@ SelectComparisons.menelaus()
 ```elixir
 SelectComparisons.merchant()
 ```
+
+```elixir
+SelectComparisons.odysseus()
+```
