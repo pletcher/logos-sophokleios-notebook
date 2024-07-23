@@ -57,6 +57,33 @@ defmodule SophoclesTfIdf do
     Enum.sum(word_scores) / Enum.count(words) / other_speaker_max_tf_idf
   end
 
+  @doc """
+  Compare the two documents using cosine similarity (Similarity.cosine/2).
+
+  Use an ε value of 1e-8 to avoid divide-by-zero errors. (PyTorch does 
+  the same: https://pytorch.org/docs/stable/generated/torch.nn.CosineSimilarity.html.)
+  """
+  def score_line_by_cosine_similarity(words, other_speaker_document) do
+    my_word_scores = words |> Enum.map(&Map.get(&1, "tf-idf"))
+
+    other_word_scores =
+      words
+      |> Enum.map(fn word ->
+        other_speaker_document
+        |> Enum.find(
+          %{"tf-idf" => 0.00000001},
+          &(Map.get(&1, "lemma") == Map.get(word, "lemma"))
+        )
+        |> Map.get("tf-idf")
+      end)
+
+    if Enum.all?(my_word_scores, &(&1 == 0)) || Enum.all?(other_word_scores, &(&1 == 0)) do
+      0
+    else
+      Similarity.cosine(my_word_scores, other_word_scores)
+    end
+  end
+
   def compare_speakers(speaker_documents) do
     speaker_documents
     |> Enum.map(fn {speaker, document} ->
@@ -68,7 +95,7 @@ defmodule SophoclesTfIdf do
           line_scores =
             speaker_documents
             |> Enum.map(fn {speaker2, speaker2_document} ->
-              {speaker2, score_line(line_words, speaker2_document)}
+              {speaker2, score_line_by_cosine_similarity(line_words, speaker2_document)}
             end)
 
           {n, line_scores}
@@ -328,6 +355,64 @@ defmodule ComparisonPlots do
   end
 end
 
+defmodule TrachiniaeComparisons do
+  def deianira do
+    urn = "tlg0011.tlg001.perseus-grc2.cp-words"
+
+    deianira_all =
+      ComparisonPlots.csv_to_dataset(
+        urn,
+        "Δηιάνειρα",
+        "Deianira compared to all other speakers in _Trachiniae_"
+      )
+
+    Tucan.vconcat([deianira_all])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+
+  def hyllus do
+    urn = "tlg0011.tlg001.perseus-grc2.cp-words"
+
+    hyllus_all =
+      ComparisonPlots.csv_to_dataset(
+        urn,
+        "Ὕλλος",
+        "Hyllus compared to all other speakers in _Trachiniae_"
+      )
+
+    Tucan.vconcat([hyllus_all])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+
+  def lichas do
+    urn = "tlg0011.tlg001.perseus-grc2.cp-words"
+
+    lichas_all =
+      ComparisonPlots.csv_to_dataset(
+        urn,
+        "Λίχας",
+        "Lichas compared to all other speakers in _Trachiniae_"
+      )
+
+    Tucan.vconcat([lichas_all])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+
+  def messenger do
+    urn = "tlg0011.tlg001.perseus-grc2.cp-words"
+
+    messenger_all =
+      ComparisonPlots.csv_to_dataset(
+        urn,
+        "Ἄγγελος",
+        "Messenger compared to all other speakers in _Trachiniae_"
+      )
+
+    Tucan.vconcat([messenger_all])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+end
+
 defmodule SelectComparisons do
   def antigone do
     urn = "tlg0011.tlg002.perseus-grc2.cp-words"
@@ -420,6 +505,10 @@ defmodule SelectComparisons do
     |> Tucan.set_theme(:five_thirty_eight)
   end
 end
+```
+
+```elixir
+TrachiniaeComparisons.hyllus()
 ```
 
 ```elixir
