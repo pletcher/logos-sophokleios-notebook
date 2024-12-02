@@ -6,6 +6,7 @@
 Mix.install([
   {:csv, "~> 3.2"},
   {:kino_vega_lite, "~> 0.1.8"},
+  {:scholar, "~> 0.3.1"},
   {:similarity, "~> 0.2"},
   {:tucan, "~> 0.2.1"}
 ])
@@ -62,24 +63,36 @@ defmodule SophoclesTfIdf do
 
   Use an ε value of 1e-8 to avoid divide-by-zero errors. (PyTorch does 
   the same: https://pytorch.org/docs/stable/generated/torch.nn.CosineSimilarity.html.)
+
+  With similarity scores in hand, we can calculate the area under the line for
+  each speaker comparison to get a similarity heuristic
   """
   def score_line_by_cosine_similarity(words, other_speaker_document) do
-    my_word_scores = words |> Enum.map(&Map.get(&1, "tf-idf"))
-
-    other_word_scores =
-      words
-      |> Enum.map(fn word ->
-        other_speaker_document
+    score_tuples = words |> Enum.map(fn word -> 
+      their_score = 
+        other_speaker_document 
         |> Enum.find(
-          %{"tf-idf" => 0.00000001},
+          %{"tf-idf" => nil}, 
           &(Map.get(&1, "lemma") == Map.get(word, "lemma"))
         )
         |> Map.get("tf-idf")
-      end)
 
-    if Enum.all?(my_word_scores, &(&1 == 0)) || Enum.all?(other_word_scores, &(&1 == 0)) do
-      0
-    else
+      my_score = Map.get(word, "tf-idf")
+
+      if is_nil(their_score) || their_score == 0 || my_score == 0 do
+        nil
+      else
+        {my_score, their_score}
+      end
+    end)
+    |> Enum.reject(&is_nil/1)
+        
+    my_word_scores = Enum.map(score_tuples, &elem(&1, 0))
+    other_word_scores = Enum.map(score_tuples, &elem(&1, 1))
+    
+    if length(my_word_scores) == 0 || length(other_word_scores) == 0 do
+      0.0
+    else 
       Similarity.cosine(my_word_scores, other_word_scores)
     end
   end
@@ -262,9 +275,9 @@ ComparisonToCsv.to_csv(compared_lines)
 
 ```elixir
 defmodule ComparisonPlots do
-  def csv_to_dataset(urn, speaker, title, filter \\ fn _x -> true end)
+  def csv_to_dataset(urn, speaker, filter \\ fn _x -> true end)
 
-  def csv_to_dataset(urn, speaker, title, filter) when is_function(filter) do
+  def csv_to_dataset(urn, speaker, filter) when is_function(filter) do
     filename =
       if __DIR__ == "." do
         __DIR__ <> "/../apps/files/#{urn}.#{speaker}.csv"
@@ -272,43 +285,76 @@ defmodule ComparisonPlots do
         __DIR__ <> "/files/#{urn}.#{speaker}.csv"
       end
 
-    File.stream!(filename)
-    |> CSV.decode!(escape_character: ?|, headers: true, separator: ?\t)
-    |> Enum.filter(fn row -> filter.(row) end)
-    |> Enum.map(fn %{
-                     "line" => line,
-                     "name" => name,
-                     "similarity_score" => similarity_score
-                   } ->
-      %{
-        "line" => SophoclesTfIdf.clean_line_number(line),
-        "name" => name,
-        "similarity" => String.to_float(similarity_score)
-      }
-    end)
-    |> Tucan.area(
+    lines = 
+      File.stream!(filename)
+      |> CSV.decode!(escape_character: ?|, headers: true, separator: ?\t)
+      |> Enum.filter(fn row -> filter.(row) end)
+      |> Enum.reject(fn row -> Map.get(row, "name") == speaker end)
+      |> Enum.map(fn %{
+                       "line" => line,
+                       "name" => name,
+                       "similarity_score" => similarity_score
+                     } ->
+        %{
+          "line" => SophoclesTfIdf.clean_line_number(line),
+          "name" => name,
+          "similarity" => String.to_float(similarity_score)
+        }
+      end)
+
+    areas = 
+      lines
+      |> Enum.group_by(&Map.get(&1, "name"))
+      |> Enum.map(fn {name, name_lines} -> 
+        %{
+          "name" => name, 
+          "area" => name_lines 
+            |> Enum.map(&Map.get(&1, "similarity"))
+            |> Nx.tensor()
+            |> Scholar.Integrate.trapezoidal_uniform()
+            |> Nx.to_number()
+        }
+      end)
+    
+    {lines, areas}
+  end
+
+  def csv_to_dataset(urn, speaker, filter) when is_list(filter) do
+    csv_to_dataset(urn, speaker, &Enum.member?(filter, Map.get(&1, "name")))
+  end
+
+  def csv_to_dataset(urn, speaker, filter) when is_binary(filter) do
+    csv_to_dataset(urn, speaker, &(Map.get(&1, "name") == filter))
+  end
+
+  def to_bar_chart(title, lines) do
+    lines
+    |> Tucan.bar(
       "line",
       "similarity",
       x: [type: :ordinal],
-      interpolate: "monotone",
+      mode: :grouped,
+      color_by: "name",
+      title: title,
+      tooltip: :data
+    )
+    |> Tucan.set_width(8000)
+    |> Tucan.Legend.put_options(:color, label_font_size: 12, title: "Speaker")
+  end 
+
+  def to_stripplot(title, areas) do
+    areas
+    |> Tucan.stripplot(
+      "area",
       color_by: "name",
       title: title,
       tooltip: :data,
-      points: true,
-      mode: :no_stack,
-      fill_opacity: 0.4
+      style: :point,
+      orient: :vertical
     )
-    |> Tucan.set_height(600)
-    |> Tucan.set_width(1200)
-    |> Tucan.Legend.put_options(:color, label_font_size: 12, symbol_size: 160, title: "Speaker")
-  end
-
-  def csv_to_dataset(urn, speaker, title, filter) when is_list(filter) do
-    csv_to_dataset(urn, speaker, title, &Enum.member?(filter, Map.get(&1, "name")))
-  end
-
-  def csv_to_dataset(urn, speaker, title, filter) when is_binary(filter) do
-    csv_to_dataset(urn, speaker, title, &(Map.get(&1, "name") == filter))
+    |> Tucan.set_height(300)
+    |> Tucan.set_width(300)
+    |> Tucan.Legend.put_options(:color, label_font_size: 12, title: "Speaker")
   end
 
   def transliterate(s) do
@@ -354,161 +400,185 @@ defmodule ComparisonPlots do
     end
   end
 end
+```
 
-defmodule TrachiniaeComparisons do
+```elixir
+defmodule SelectComparisons do
+  def plot(urn, name, title, filter) do
+    {lines, areas} = ComparisonPlots.csv_to_dataset(urn, name, filter)
+    
+    bar_chart = ComparisonPlots.to_bar_chart(title, lines)
+    stripplot = ComparisonPlots.to_stripplot(title, areas)
+
+    Tucan.vconcat([stripplot, bar_chart])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+  
+  def plot(urn, name, title) do
+    {lines, areas} = ComparisonPlots.csv_to_dataset(urn, name)
+    
+    bar_chart = ComparisonPlots.to_bar_chart(title, lines)
+    stripplot = ComparisonPlots.to_stripplot(title, areas)
+
+    Tucan.vconcat([stripplot, bar_chart])
+    |> Tucan.set_theme(:five_thirty_eight)
+  end
+  
   def deianira do
     urn = "tlg0011.tlg001.perseus-grc2.cp-words"
-
-    deianira_all =
-      ComparisonPlots.csv_to_dataset(
-        urn,
-        "Δηιάνειρα",
-        "Deianira compared to all other speakers in _Trachiniae_"
-      )
-
-    Tucan.vconcat([deianira_all])
-    |> Tucan.set_theme(:five_thirty_eight)
+    
+    plot(
+      urn,
+      "Δηιάνειρα",
+      "Deianira compared to all other speakers in Trachiniae"
+    )
   end
 
   def hyllus do
     urn = "tlg0011.tlg001.perseus-grc2.cp-words"
 
-    hyllus_all =
-      ComparisonPlots.csv_to_dataset(
-        urn,
-        "Ὕλλος",
-        "Hyllus compared to all other speakers in _Trachiniae_"
-      )
-
-    Tucan.vconcat([hyllus_all])
-    |> Tucan.set_theme(:five_thirty_eight)
+    plot(
+      urn,
+      "Ὕλλος",
+      "Hyllus compared to all other speakers in Trachiniae"
+    )
   end
 
   def lichas do
     urn = "tlg0011.tlg001.perseus-grc2.cp-words"
 
-    lichas_all =
-      ComparisonPlots.csv_to_dataset(
+    plot(
         urn,
         "Λίχας",
-        "Lichas compared to all other speakers in _Trachiniae_"
+        "Lichas compared to all other speakers in Trachiniae"
       )
-
-    Tucan.vconcat([lichas_all])
-    |> Tucan.set_theme(:five_thirty_eight)
   end
 
   def messenger do
     urn = "tlg0011.tlg001.perseus-grc2.cp-words"
 
-    messenger_all =
-      ComparisonPlots.csv_to_dataset(
+    plot(
         urn,
         "Ἄγγελος",
-        "Messenger compared to all other speakers in _Trachiniae_"
+        "Messenger compared to all other speakers in Trachiniae"
       )
-
-    Tucan.vconcat([messenger_all])
-    |> Tucan.set_theme(:five_thirty_eight)
   end
-end
 
-defmodule SelectComparisons do
+  def nurse do
+    urn = "tlg0011.tlg001.perseus-grc2.cp-words"
+
+    plot(
+      urn,
+      "Τροφός",
+      "Nurse compared to all other speakers in Trachiniae"
+    )
+  end
+
+  def servant do
+    urn = "tlg0011.tlg001.perseus-grc2.cp-words"
+
+    plot(
+      urn,
+      "Θεράπαινα",
+      "Servant compared to all other speakers in Trachiniae"
+    )
+  end
+
   def antigone do
     urn = "tlg0011.tlg002.perseus-grc2.cp-words"
 
-    antigone_all =
-      ComparisonPlots.csv_to_dataset(urn, "Ἀντιγόνη", "Antigone compared to all other speakers")
-
-    antigone_ismene_kreon =
-      ComparisonPlots.csv_to_dataset(urn, "Ἀντιγόνη", "Antigone compared to Ismene and Creon", [
-        "Ἀντιγόνη",
-        "Ἰσμήνη",
-        "Κρέων"
-      ])
-
-    Tucan.vconcat([antigone_all, antigone_ismene_kreon])
-    |> Tucan.set_theme(:five_thirty_eight)
+    plot(urn, "Ἀντιγόνη", "Antigone compared to all other speakers")
+  end
+  
+  def antigone_ismene_kreon do
+    urn = "tlg0011.tlg002.perseus-grc2.cp-words"
+    
+    plot(urn, "Ἀντιγόνη", "Antigone compared to Ismene and Creon", [
+      "Ἀντιγόνη",
+      "Ἰσμήνη",
+      "Κρέων"
+    ])
   end
 
   def creon do
     urn = "tlg0011.tlg002.perseus-grc2.cp-words"
 
-    kreon_all =
-      ComparisonPlots.csv_to_dataset(urn, "Κρέων", "Creon compared to all other speakers")
+    plot(urn, "Κρέων", "Creon compared to all other speakers")
+  end
 
-    kreon_antigone_ismene =
-      ComparisonPlots.csv_to_dataset(urn, "Κρέων", "Creon compared to Antigone and Ismene", [
-        "Κρέων",
-        "Ἀντιγόνη",
-        "Ἰσμήνη"
-      ])
-
-    Tucan.vconcat([kreon_all, kreon_antigone_ismene])
-    |> Tucan.set_theme(:five_thirty_eight)
+  def creon_antigone_ismene do
+    urn = "tlg0011.tlg002.perseus-grc2.cp-words"
+    
+    plot(urn, "Κρέων", "Creon compared to Antigone and Ismene", [
+      "Κρέων",
+      "Ἀντιγόνη",
+      "Ἰσμήνη"
+    ])
   end
 
   def ismene do
     urn = "tlg0011.tlg002.perseus-grc2.cp-words"
 
-    ismene_all =
-      ComparisonPlots.csv_to_dataset(urn, "Ἰσμήνη", "Ismene compared to all other speakers")
+    plot(urn, "Ἰσμήνη", "Ismene compared to all other speakers")
+  end
 
-    ismene_antigone_kreon =
-      ComparisonPlots.csv_to_dataset(urn, "Ἰσμήνη", "Ismene compared to Antigone and Creon", [
-        "Ἰσμήνη",
-        "Ἀντιγόνη",
-        "Κρέων"
-      ])
-
-    Tucan.vconcat([ismene_all, ismene_antigone_kreon])
-    |> Tucan.set_theme(:five_thirty_eight)
+  def ismene_antigone_creon do
+    urn = "tlg0011.tlg002.perseus-grc2.cp-words"
+    
+    plot(urn, "Ἰσμήνη", "Ismene compared to Antigone and Creon", [
+      "Ἰσμήνη",
+      "Ἀντιγόνη",
+      "Κρέων"
+    ])
   end
 
   def menelaus do
     urn = "tlg0011.tlg003.perseus-grc2.cp-words"
 
-    menelaus_all =
-      ComparisonPlots.csv_to_dataset(urn, "Μενέλαος", "Menelaus compared to all other speakers")
+    plot(urn, "Μενέλαος", "Menelaus compared to all other speakers")
+  end
 
-    Tucan.vconcat([menelaus_all])
-    |> Tucan.set_theme(:five_thirty_eight)
+  def menelaus_odysseus do
+    urn = "tlg0011.tlg003.perseus-grc2.cp-words"
+    
+    plot(urn, "Μενέλαος", "Menelaus compared to Odysseus", [
+      "Μενέλαος",
+      "Ὀδυσσεύς"
+    ])
+  end
+
+  def heracles do
+    urn = "tlg0011.tlg006.perseus-grc2.cp-words"
+
+    plot(urn, "Ἡρακλῆς", "Heracles compared to all other speakers")
   end
 
   def merchant do
     urn = "tlg0011.tlg006.perseus-grc2.cp-words"
-
-    merchant_all =
-      ComparisonPlots.csv_to_dataset(urn, "Ἔμπορος", "Merchant compared to all other speakers")
-
-    Tucan.vconcat([merchant_all])
-    |> Tucan.set_theme(:five_thirty_eight)
+    
+    plot(urn, "Ἔμπορος", "Merchant compared to all other speakers")
   end
 
   def odysseus do
     urn = "tlg0011.tlg006.perseus-grc2.cp-words"
 
-    odysseus_all =
-      ComparisonPlots.csv_to_dataset(urn, "Ὀδυσσεύς", "Odysseus compared to all other speakers")
-
-    Tucan.vconcat([odysseus_all])
-    |> Tucan.set_theme(:five_thirty_eight)
+    plot(urn, "Ὀδυσσεύς", "Odysseus compared to all other speakers")
   end
 
   def tutor do
     urn = "tlg0011.tlg005.perseus-grc2.cp-words"
 
-    tutor_all =
-      ComparisonPlots.csv_to_dataset(urn, "Παιδαγωγός", "Tutor compared to all other speakers")
-
-    Tucan.vconcat([tutor_all])
-    |> Tucan.set_theme(:five_thirty_eight)
+    plot(urn, "Παιδαγωγός", "Tutor compared to all other speakers")
   end
 end
 ```
 
 ```elixir
-TrachiniaeComparisons.hyllus()
+SelectComparisons.lichas()
+```
+
+```elixir
+SelectComparisons.messenger()
 ```
 
 ```elixir
@@ -532,5 +602,15 @@ SelectComparisons.merchant()
 ```
 
 ```elixir
+SelectComparisons.heracles()
+```
+
+```elixir
 SelectComparisons.odysseus()
 ```
+
+```elixir
+SelectComparisons.tutor()
+```
+
+<!-- livebook:{"offset":14784,"stamp":{"token":"XCP.368XPCOmKYsGT61CtysDHgvlsb643S1yRcjKtYNbUWkMfq7RVE673B0MzbwHGa8hqti7UrmOpE9PraGQcdvkf3XDbrwvkQfHw2QcqS5xWn9U8zBiR7anLDn5","version":2}} -->
